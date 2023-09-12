@@ -55,3 +55,6 @@ Controller
 * Create search box -> onsubmit, call model with input, 
   pass model into view
 * Unit conversion toggle -> update view with new units
+
+Possible fonts: 
+heebo, josefin sans, kanit, rubik

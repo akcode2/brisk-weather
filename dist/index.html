@@ -4,8 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+    <div class="container">
+        <div class="whereAndWhen">
+            <div id="city">Washington, D.C.</div>
+            <div id="time">Sunday, Sep 10 3:03 PM</div>
+        </div>
+        <div id="conditionText" class="conditionText">Cloudy with a chance of scattered thunderstorms</div>
+        <div class="currentTemp">
+            <span id="temp">29°</span>
+            <div class="feelsLike">Feels like <span id="tempFeels">30°</span></div>
+        </div>
+        <div id="forecast" class="forecast">
+        </div>
+        <div id="rainCard" class="card cardless"><span class="cardTitle">Chance of Rain</span><span id="chanceOfRain">33%</span></div>
+        <div id="humidityCard" class="card cardless"><span class="cardTitle">Humidity</span><span id="humidity">41%</span></div>
+        <div id="UVCard" class="card"><span class="cardTitle">UV Index</span><div class="cardRow"><span id="uvIndex">9 Moderate</span><span id="uvAction">Stay in shade near midday</span></div></div>
+        <div id="AQICard" class="card"><span class="cardTitle">Air Quality Index</span><div class="cardRow"><span id="airQuality">157 Unhealthy</span><span id="airAction">Some people and sensitive groups may experience health effects</span></div></div>
+        
+            <!-- <div class="highLow">H:<span id="todayHigh">32°</span> <br> L:<span id="todayLow">23°</span></div> -->
+
+        
+    </div>
     <script src="./main.js"></script>
 </body>
 </html>
