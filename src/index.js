@@ -1,14 +1,15 @@
 import { getHours, format } from 'date-fns'
 
-const model = () => {
+const model = (location) => {
   // Secure this in prod
   const apiKey = "8dfac318e5d043b1af2192352230809";
   const baseURL = "https://api.weatherapi.com/v1";
+  const dataLocation = location ? location : "auto:ip";
 
   // Define paramaters
   const params = new URLSearchParams({
     key: apiKey,
-    q: "auto:ip",
+    q: dataLocation,
     days: 3,
     aqi: 'yes'
   });
@@ -23,17 +24,12 @@ const model = () => {
     // Then return the JSON
     return response.json();
   }
-  // Do the fetching, then console log the json
-//   getWeather().then((data) => {
-//     console.log(data);
-//   });
-//   Return the promise that resolves to the weather data
+
   return getWeather();
 };
 
 const view = (model) => {
     // Get DOM objects
-    const city = document.getElementById('city');
     const localTime = document.getElementById('time');
     const temp = document.getElementById('temp');
     const feelsLike = document.getElementById('tempFeels');
@@ -314,7 +310,6 @@ const view = (model) => {
               "icon": './images/thunderstorms-day-snow.svg'
             }
     }
-    city.textContent = model.location.name;
 
     // new Date() expects time in milliseconds (numerical, not string)
     // so we multiply by 1000, pass this to format, and finally update the localTime span
@@ -336,6 +331,9 @@ const view = (model) => {
     // Set Air Quality Index
     airQuality.textContent = `${model.current.air_quality["us-epa-index"]} ${aqiScale[model.current.air_quality["us-epa-index"]].level}`
     airAction.textContent = `${aqiScale[model.current.air_quality["us-epa-index"]].implications}`;
+
+    // Clear any previous forecast divs
+    forecast.textContent = '';
 
     // Create hourly forecast divs
     // The array is zero-indexed so the current hour integer
@@ -373,7 +371,6 @@ const view = (model) => {
         hourDiv.append(hourlyTime, hourlyTemp, hourlyImg, hourlyChance);
         forecast.append(hourDiv);
     }
-    // console.log(model.forecast.forecastday[0].hour[hourIndex]);
 }      
 
 const controller = async () => {
@@ -384,6 +381,17 @@ const controller = async () => {
     // Call view() and pass in weatherData
     view(weatherData);
     console.log(weatherData);
+
+    // Get input field
+    const searchForm = document.getElementById('searchForm');
+    const searchBox = document.getElementById('searchBox');
+    searchBox.value = weatherData.location.name;
+
+    searchForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const newLocationData = await model(searchBox.value);
+        view(newLocationData);
+    })
 }
 
 
