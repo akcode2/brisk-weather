@@ -1,0 +1,340 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@700&family=Heebo&family=Inter:wght@300;400;700&family=Nunito:wght@700&family=Playfair+Display&display=swap');
+
+/* CSS Reset */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* height: 100%; */
+    background-image: linear-gradient(
+        180deg,
+        hsl(206deg 100% 91%) 0%,
+        hsl(206deg 97% 88%) 11%,
+        hsl(206deg 95% 85%) 22%,
+        hsl(207deg 94% 82%) 33%,
+        hsl(207deg 93% 79%) 44%,
+        hsl(207deg 92% 76%) 56%,
+        hsl(207deg 92% 73%) 67%,
+        hsl(207deg 92% 70%) 78%,
+        hsl(207deg 92% 67%) 89%,
+        hsl(207deg 91% 64%) 100%
+      );
+    border-image-repeat: stretch;
+    /* border: 2px solid red; */
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.container {
+    /* Flex width */
+    width: 65ch;
+    /* Grid */
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 1fr;
+    font-family: 'Inter', sans-serif;
+}
+
+.whereAndWhen {
+    grid-row: 1;
+    grid-column: 1 / 3;
+    /* Make it its own grid */
+    display: grid;
+    text-align: center;
+    grid-template-columns: 1fr min-content 1fr;
+}
+
+#currentConditionImg {
+    position: absolute;
+    height: 20vh;
+    margin-top: 2rem;
+}
+
+
+#searchForm {
+    grid-row: 1;
+    grid-column: 2;
+    margin: auto;
+    margin-top: 18px;
+}
+
+#searchBox {
+    border: 0;
+    background-image: url(./images/searchIcon.svg);
+    background-repeat: no-repeat;
+    background-position: 95% center;
+    background-size: 1rem;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: .5ch 1ch;
+    border-radius: 30px;
+    background: #f2f4fc9b
+}
+
+#searchBox:focus {
+    outline: none;
+    background-color: #f2f4fcf7;
+}
+
+
+#time {
+    grid-row: 2;
+    grid-column: 2;
+}
+
+#unitConversion {
+    display: flex;
+    position: absolute;
+    right: 18px;
+    top: 4rem;
+}
+
+/* Unit conversion buttons */
+button {
+    font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: .25ch;
+    color: #868e96;
+    border: 0;
+    background: transparent;
+}
+
+.activeUnit {
+    color: black;
+}
+
+
+.conditionText {
+    grid-row: 2;
+    grid-column: 1 / 3;
+    font-family: 'Playfair Display', serif;
+    padding: 0 1rem;
+    font-size: 1.5rem;
+    margin-top: 4rem;
+}
+
+.currentTemp {
+    grid-row: 3;
+    grid-column: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Heebo', sans-serif;
+}
+
+#temp, #tempFeels, #todayHigh, #todayLow {
+    font-family: 'Figtree';
+}
+
+#temp {
+    font-size: 165px;
+    line-height: 165px;
+}
+
+.feelsLike {
+    font-size: 20px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#highLow {
+    /* grid-row: 3;
+    grid-column: 2;
+    align-self: end;
+    margin-left: auto;
+    margin-right: 3rem; */
+    position: absolute;
+    right: 18px;
+    top: 6rem;
+}
+
+.card {
+    /* Flexbox */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1ch;
+    
+    /* Card styling */
+    border-radius: 10px;
+    background-color: #f2f4fc24;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    padding: 1ch 2ch;
+    height: 6rem;
+
+    /* Font */
+    color: #001858;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+
+    /* Margin to add whitespace above and below cards */
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+}
+
+.cardless {
+    /* Flexbox */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1ch;
+
+    /* Padding */
+    padding: 1ch 2ch;
+
+    /* Font */
+    color: #001858;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+}
+
+
+.cardTitle {
+    text-align: center;
+    font-weight: 300;
+}
+
+.cardRow {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+#rainCard, #humidityCard {
+    grid-row: 4;
+    width: 16ch;
+    height: 7ch;
+    margin: auto;
+    line-height: 14px;
+}
+
+#rainCard {
+    grid-column: 1;
+}
+
+#humidityCard {
+    grid-column: 2;
+}
+
+#chanceOfRain, #humidity {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+ #uvIndex, #airQuality {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+#uvIndex, #airQuality {
+    width: 100px;
+}
+
+
+#uvAction, #airAction {
+    flex: 1;
+}
+
+#uvAction, #airAction {
+    font-size: 8px;
+}
+
+#UVCard, #AQICard {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#UVCard {
+    grid-row: 6;
+    grid-column: 1 / 3;
+}
+
+#AQICard {
+    grid-row: 7;
+    grid-column: 1 / 3;
+}
+
+.forecast {
+    /* Grid placement */
+    grid-column: 1 / 3;
+    grid-row: 5;
+    /* Display as a scrollable grid */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 6ch);
+    grid-auto-flow: column;
+    column-gap: 3ch;
+    width: 100%;
+    height: 115px;
+    overflow-x: auto;
+    white-space: nowrap;
+    /* Hide scrollbar for IE, Edge, and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    /* Card styling */
+    background-color: #f2f4fc24;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    padding: 0 2ch;
+    /* Font */
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Hide scrollbar on forecast for Chrome, Safari, and Opera */
+.forecast::-webkit-scrollbar {
+    display: none;
+}
+
+
+.hour {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 115px;
+    width: 6ch;
+    font-size: 12px;
+}
+
+.hourStart {
+    background-color: #f1f3f546;
+}
+
+.hourlyTime {
+    font-size: 10px;
+    margin-bottom: 1ch;
+}
+
+.hourlyTimeStart {
+    font-weight: bold;
+}
+
+.hourlyImg {
+    height: 60px;
+}
+
+.hourlyChance {
+    margin-bottom: 2ch;
+}
+
+@media (orientation: portrait) {
+    .wrapper {
+        height: 100vh;
+    }
+}
