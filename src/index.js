@@ -364,18 +364,17 @@ const view = (model) => {
         hourlyChance.classList.add('hourlyChance');
 
         if (i === hourIndex) {
+            hourlyTime.classList.add('hourlyTimeStart');
+            hourDiv.classList.add('hourStart');
             if (day === 0) {
                 hourlyTime.textContent = 'Now';
             }
-            else if (day === 1)
-            {
+            else if (day === 1) {
                 hourlyTime.textContent = format(addDays(parsedTime, 1), 'eee');
             }
-            else if (day === 2)
-            {
+            else if (day === 2) {
                 hourlyTime.textContent = format(addDays(parsedTime, 2), 'eee');
             }
-            
         }
         else {
             hourlyTime.textContent = format(parse(hour.time, 'yyyy-MM-dd H:mm', new Date()), 'haaa');
@@ -393,40 +392,6 @@ const view = (model) => {
     getHourlyForecasts(0, hourIndex);
     getHourlyForecasts(1, 0);
     getHourlyForecasts(2, 0);
-
-    // Display the rest of today's hourly forecasts
-    // for (let i = hourIndex; i < 24; i++) {
-    //     const hour = model.forecast.forecastday[0].hour[i];
-
-    //     const hourDiv = document.createElement('div');
-    //     hourDiv.classList.add('hour');
-
-    //     const hourlyTime = document.createElement('div');
-    //     hourlyTime.classList.add('hourlyTime');
-
-    //     const hourlyTemp = document.createElement('div');
-    //     hourlyTemp.classList.add('hourlyTemp');
-
-    //     const hourlyImg = document.createElement('img');
-    //     hourlyImg.classList.add('hourlyImg');
-
-    //     const hourlyChance = document.createElement('div');
-    //     hourlyChance.classList.add('hourlyChance');
-
-    //     if (i === hourIndex) {
-    //         hourlyTime.textContent = 'Now';
-    //     }
-    //     else {
-    //         hourlyTime.textContent = format(parse(hour.time, 'yyyy-MM-dd H:mm', new Date()), 'haaa');
-    //     }
-
-    //     hourlyTemp.textContent = `${Math.round(hour.temp_f)}°`;
-    //     hourlyImg.src = conditionsByCode[hour.condition.code].icon;
-    //     hourlyChance.textContent = `${hour.chance_of_rain}%`;
-
-    //     hourDiv.append(hourlyTime, hourlyTemp, hourlyImg, hourlyChance);
-    //     forecast.append(hourDiv);
-    // }
 }      
 
 const controller = async () => {
@@ -438,15 +403,31 @@ const controller = async () => {
     view(weatherData);
     // console.log(weatherData);
 
-    // Get input field
+    // Get search form 
     const searchForm = document.getElementById('searchForm');
     const searchBox = document.getElementById('searchBox');
     searchBox.value = weatherData.location.name;
-
+    // Listen for submit
     searchForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const newLocationData = await model(searchBox.value);
         view(newLocationData);
+    })
+
+    // Get unit conversion buttons
+    const fahrenheitBtn = document.getElementById('fahrenheit');
+    const celsiusBtn = document.getElementById('celsius');
+
+    fahrenheitBtn.addEventListener('click', () => {
+        // Update styling
+        celsiusBtn.classList.remove('activeUnit');
+        fahrenheitBtn.classList.add('activeUnit');
+    })
+
+    celsiusBtn.addEventListener('click', () => {
+        // Update styling
+        celsiusBtn.classList.add('activeUnit');
+        fahrenheitBtn.classList.remove('activeUnit');
     })
 }
 
