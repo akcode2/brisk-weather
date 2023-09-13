@@ -36,6 +36,8 @@ const view = (model) => {
     const temp = document.getElementById('temp');
     const feelsLike = document.getElementById('tempFeels');
     const conditionText = document.getElementById('conditionText');
+    const todayHigh = document.getElementById('todayHigh');
+    const todayLow = document.getElementById('todayLow');
     const humidity = document.getElementById('humidity');
     const chanceOfRain = document.getElementById('chanceOfRain');
     const uvIndex = document.getElementById('uvIndex');
@@ -324,6 +326,10 @@ const view = (model) => {
     temp.textContent = `${Math.round(model.current.temp_f)}°`;
     // Set Feels Like temperature
     feelsLike.textContent = `${Math.round(model.current.feelslike_f)}°`;
+    // Set today's high
+    todayHigh.textContent = `${Math.round(model.forecast.forecastday[0].day.maxtemp_f)}°`;
+    // Set today's low
+    todayLow.textContent = `${Math.round(model.forecast.forecastday[0].day.mintemp_f)}°`;
     // Set humidity
     humidity.textContent = `${model.current.humidity}%`;
     // Set chance of rain
@@ -402,6 +408,8 @@ const view = (model) => {
     const fahrenheit = () => {
         temp.textContent = `${Math.round(model.current.temp_f)}°`;
         feelsLike.textContent = `${Math.round(model.current.feelslike_f)}°`;
+        todayHigh.textContent = `${Math.round(model.forecast.forecastday[0].day.maxtemp_f)}°`;
+        todayLow.textContent = `${Math.round(model.forecast.forecastday[0].day.mintemp_f)}°`;
         forecast.textContent = '';
         getHourlyForecasts(0, hourIndex, 'fahrenheit');
         getHourlyForecasts(1, 0, 'fahrenheit');
@@ -412,6 +420,8 @@ const view = (model) => {
     const celsius = () => {
         temp.textContent = `${Math.round(model.current.temp_c)}°`;
         feelsLike.textContent = `${Math.round(model.current.feelslike_c)}°`;
+        todayHigh.textContent = `${Math.round(model.forecast.forecastday[0].day.maxtemp_c)}°`;
+        todayLow.textContent = `${Math.round(model.forecast.forecastday[0].day.mintemp_c)}°`;
         forecast.textContent = '';
         getHourlyForecasts(0, hourIndex, 'celsius');
         getHourlyForecasts(1, 0, 'celsius');
