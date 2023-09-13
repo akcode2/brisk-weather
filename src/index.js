@@ -344,7 +344,7 @@ const view = (model) => {
     // actually represents the next hour's index
     const hourIndex = getHours(parsedTime);
     
-    function getHourlyForecasts(day, hourIndex) {
+    function getHourlyForecasts(day, hourIndex, unit) {
         for (let i = hourIndex; i < 24; i++) {
         const hour = model.forecast.forecastday[day].hour[i];
 
@@ -379,8 +379,13 @@ const view = (model) => {
         else {
             hourlyTime.textContent = format(parse(hour.time, 'yyyy-MM-dd H:mm', new Date()), 'haaa');
         }
+        if (unit === 'celsius') {
+            hourlyTemp.textContent = `${Math.round(hour.temp_c)}°`
+        }
+        else {
+            hourlyTemp.textContent = `${Math.round(hour.temp_f)}°`;
+        }
 
-        hourlyTemp.textContent = `${Math.round(hour.temp_f)}°`;
         hourlyImg.src = conditionsByCode[hour.condition.code].icon;
         hourlyChance.textContent = `${hour.chance_of_rain}%`;
 
@@ -392,6 +397,33 @@ const view = (model) => {
     getHourlyForecasts(0, hourIndex);
     getHourlyForecasts(1, 0);
     getHourlyForecasts(2, 0);
+
+    // Define the fahrenheit method
+    const fahrenheit = () => {
+        temp.textContent = `${Math.round(model.current.temp_f)}°`;
+        feelsLike.textContent = `${Math.round(model.current.feelslike_f)}°`;
+        forecast.textContent = '';
+        getHourlyForecasts(0, hourIndex, 'fahrenheit');
+        getHourlyForecasts(1, 0, 'fahrenheit');
+        getHourlyForecasts(2, 0, 'fahrenheit');
+    };
+
+    // Define the celsius method
+    const celsius = () => {
+        temp.textContent = `${Math.round(model.current.temp_c)}°`;
+        feelsLike.textContent = `${Math.round(model.current.feelslike_c)}°`;
+        forecast.textContent = '';
+        getHourlyForecasts(0, hourIndex, 'celsius');
+        getHourlyForecasts(1, 0, 'celsius');
+        getHourlyForecasts(2, 0, 'celsius');
+    };
+
+    // Attach the fahrenheit method to the view object
+    view.fahrenheit = fahrenheit;
+    view.celsius = celsius;
+
+    // Return the view object
+    return view;
 }      
 
 const controller = async () => {
@@ -417,17 +449,24 @@ const controller = async () => {
     // Get unit conversion buttons
     const fahrenheitBtn = document.getElementById('fahrenheit');
     const celsiusBtn = document.getElementById('celsius');
+    // Set Fahrenheit as default active unit
+    fahrenheitBtn.classList.add('activeUnit');
 
     fahrenheitBtn.addEventListener('click', () => {
         // Update styling
         celsiusBtn.classList.remove('activeUnit');
         fahrenheitBtn.classList.add('activeUnit');
+
+        // Update units
+        view.fahrenheit();
     })
 
     celsiusBtn.addEventListener('click', () => {
         // Update styling
         celsiusBtn.classList.add('activeUnit');
         fahrenheitBtn.classList.remove('activeUnit');
+        // Update units
+        view.celsius();
     })
 }
 
