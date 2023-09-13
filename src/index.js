@@ -1,4 +1,4 @@
-import { getHours, format } from 'date-fns'
+import { parse, addDays, getHours, format } from 'date-fns'
 
 const model = (location) => {
   // Secure this in prod
@@ -29,11 +29,12 @@ const model = (location) => {
 };
 
 const view = (model) => {
+    console.log(model);
     // Get DOM objects
+    const currentConditionImg = document.getElementById('currentConditionImg');
     const localTime = document.getElementById('time');
     const temp = document.getElementById('temp');
     const feelsLike = document.getElementById('tempFeels');
-    const conditionCode = model.current.condition.code;
     const conditionText = document.getElementById('conditionText');
     const humidity = document.getElementById('humidity');
     const chanceOfRain = document.getElementById('chanceOfRain');
@@ -42,6 +43,8 @@ const view = (model) => {
     const airQuality = document.getElementById('airQuality');
     const airAction = document.getElementById('airAction');
     const forecast = document.getElementById('forecast');
+    // Parse the `localtime` string as a Date object
+    const parsedTime = parse(model.location.localtime, 'yyyy-MM-dd H:mm', new Date());
 
     const uvScale = {
         '1' : {'exposure': 'Low', 'action': 'Wear SPF 15. You can safely enjoy being outside!'},
@@ -309,11 +312,12 @@ const view = (model) => {
               "night": "Moderate or heavy snow with thunder",
               "icon": './images/thunderstorms-day-snow.svg'
             }
-    }
+    }  
+    // Set the current condition image
+    currentConditionImg.src = conditionsByCode[model.current.condition.code].icon;
 
-    // new Date() expects time in milliseconds (numerical, not string)
-    // so we multiply by 1000, pass this to format, and finally update the localTime span
-    localTime.textContent = (format(new Date(model.location.localtime_epoch * 1000), 'EEEE, MMM do'));
+    // Set the local date
+    localTime.textContent = (format(parsedTime, 'EEEE, MMM do'));
     // Set condition text
     conditionText.textContent = model.current.condition.text;
     // Set current temperature
@@ -338,9 +342,11 @@ const view = (model) => {
     // Create hourly forecast divs
     // The array is zero-indexed so the current hour integer
     // actually represents the next hour's index
-    const hourIndex = getHours(new Date());
-    for (let i = hourIndex; i < 24; i++) {
-        const hour = model.forecast.forecastday[0].hour[i];
+    const hourIndex = getHours(parsedTime);
+    
+    function getHourlyForecasts(day, hourIndex) {
+        for (let i = hourIndex; i < 24; i++) {
+        const hour = model.forecast.forecastday[day].hour[i];
 
         const hourDiv = document.createElement('div');
         hourDiv.classList.add('hour');
@@ -358,10 +364,21 @@ const view = (model) => {
         hourlyChance.classList.add('hourlyChance');
 
         if (i === hourIndex) {
-            hourlyTime.textContent = 'Now';
+            if (day === 0) {
+                hourlyTime.textContent = 'Now';
+            }
+            else if (day === 1)
+            {
+                hourlyTime.textContent = format(addDays(parsedTime, 1), 'eee');
+            }
+            else if (day === 2)
+            {
+                hourlyTime.textContent = format(addDays(parsedTime, 2), 'eee');
+            }
+            
         }
         else {
-            hourlyTime.textContent = format(new Date(hour.time_epoch * 1000), 'haaa');
+            hourlyTime.textContent = format(parse(hour.time, 'yyyy-MM-dd H:mm', new Date()), 'haaa');
         }
 
         hourlyTemp.textContent = `${Math.round(hour.temp_f)}°`;
@@ -370,7 +387,46 @@ const view = (model) => {
 
         hourDiv.append(hourlyTime, hourlyTemp, hourlyImg, hourlyChance);
         forecast.append(hourDiv);
+        }
     }
+
+    getHourlyForecasts(0, hourIndex);
+    getHourlyForecasts(1, 0);
+    getHourlyForecasts(2, 0);
+
+    // Display the rest of today's hourly forecasts
+    // for (let i = hourIndex; i < 24; i++) {
+    //     const hour = model.forecast.forecastday[0].hour[i];
+
+    //     const hourDiv = document.createElement('div');
+    //     hourDiv.classList.add('hour');
+
+    //     const hourlyTime = document.createElement('div');
+    //     hourlyTime.classList.add('hourlyTime');
+
+    //     const hourlyTemp = document.createElement('div');
+    //     hourlyTemp.classList.add('hourlyTemp');
+
+    //     const hourlyImg = document.createElement('img');
+    //     hourlyImg.classList.add('hourlyImg');
+
+    //     const hourlyChance = document.createElement('div');
+    //     hourlyChance.classList.add('hourlyChance');
+
+    //     if (i === hourIndex) {
+    //         hourlyTime.textContent = 'Now';
+    //     }
+    //     else {
+    //         hourlyTime.textContent = format(parse(hour.time, 'yyyy-MM-dd H:mm', new Date()), 'haaa');
+    //     }
+
+    //     hourlyTemp.textContent = `${Math.round(hour.temp_f)}°`;
+    //     hourlyImg.src = conditionsByCode[hour.condition.code].icon;
+    //     hourlyChance.textContent = `${hour.chance_of_rain}%`;
+
+    //     hourDiv.append(hourlyTime, hourlyTemp, hourlyImg, hourlyChance);
+    //     forecast.append(hourDiv);
+    // }
 }      
 
 const controller = async () => {
@@ -380,7 +436,7 @@ const controller = async () => {
 
     // Call view() and pass in weatherData
     view(weatherData);
-    console.log(weatherData);
+    // console.log(weatherData);
 
     // Get input field
     const searchForm = document.getElementById('searchForm');
